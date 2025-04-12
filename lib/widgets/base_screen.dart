@@ -1,37 +1,50 @@
 import 'package:flutter/material.dart';
-import '../main.dart'; // Importa as definições de HomeScreen e LoginScreen
+import 'package:flutter_gen/gen_l10n/l10n.dart';
+import '../screens/home_screen.dart';
+import '../screens/plants_screen.dart';
+import '../screens/recommended_plants_screen.dart';
+import '../screens/about_screen.dart';
+import '../screens/language_screen.dart';
+import '../screens/login_screen.dart';
 
 class BaseScreen extends StatelessWidget {
-  final Widget child;
   final String title;
+  final Widget child;
+  final Widget? floatingActionButton;
 
-  const BaseScreen({super.key, required this.child, required this.title});
+  const BaseScreen({
+    super.key,
+    required this.title,
+    required this.child,
+    this.floatingActionButton,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        backgroundColor: Colors.green,
       ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
+            DrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.green,
               ),
               child: Text(
-                'Guia de Plantas',
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                AppLocalizations.of(context)!.appTitle,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
               ),
             ),
             ListTile(
               leading: const Icon(Icons.home),
-              title: const Text('Início'),
+              title: Text(AppLocalizations.of(context)!.home),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -40,17 +53,48 @@ class BaseScreen extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.local_florist),
-              title: const Text('Minhas Plantas'),
+              title: Text(AppLocalizations.of(context)!.myPlants),
               onTap: () {
-                Navigator.pop(context);
-                // Futura tela de plantas
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const PlantsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.recommend),
+              title: Text(AppLocalizations.of(context)!.recommendedPlants),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RecommendedPlantsScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info),
+              title: Text(AppLocalizations.of(context)!.about),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AboutScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(AppLocalizations.of(context)!.language),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LanguageScreen()),
+                );
               },
             ),
             ListTile(
               leading: const Icon(Icons.logout),
-              title: const Text('Sair'),
+              title: Text(AppLocalizations.of(context)!.logout),
               onTap: () {
-                Navigator.pop(context);
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => const LoginScreen()),
@@ -61,6 +105,7 @@ class BaseScreen extends StatelessWidget {
         ),
       ),
       body: child,
+      floatingActionButton: floatingActionButton,
     );
   }
 }
